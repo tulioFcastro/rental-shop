@@ -2,54 +2,63 @@ from app import db
 from sqlalchemy.sql import func
 
 
+class ItemType(db.Model):
+    __tablename__ = "item_type"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return "id {}".format(self.id)
+
+    def serialize(self):
+        return {"id": self.id, "name": self.name}
+
+
 class Item(db.Model):
     __tablename__ = "item"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
 
-    item_type_id = db.Column(db.Integer, db.ForeignKey("item_type.id"), nullable=False, index=True)
-    type = db.relationship("ItemType", backref="type_of_item", foreign_keys=[item_type_id])
+    item_type_id = db.Column(
+        db.Integer, db.ForeignKey("item_type.id"), nullable=True, index=True
+    )
 
-    rent_id = db.relationship("Rent", backref="item", lazy=True)
-    reservation_id = db.relationship("Reservation", backref="item", lazy=True)
+    rent_id = db.Column(db.Integer, db.ForeignKey("rent.id"), nullable=True, index=True)
 
-    def __init__(self, name, type):
-        self.name = name
-        self.type = type
-
-    def __repr__(self):
-        return "<id {}, name {}, item_type_id {}>".format(
-            self.id, self.name, self.item_type_id
-        )
-
-    def serialize(self):
-        return {"id": self.id, "name": self.name, "item_type_id": self.item_type_id}
-
-
-class ItemType(db.Model):
-    __tablename__ = "item_type"
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(), nullable=False)
+    reservation_id = db.Column(
+        db.Integer, db.ForeignKey("reservation.id"), nullable=True, index=True
+    )
 
     def __init__(self, name):
         self.name = name
 
     def __repr__(self):
-        return "<id {}>".format(self.id)
+        return "id {}, name {}, item_type_id {}, rent_id {}, reservation_id {}".format(
+            self.id, self.name, self.item_type_id, self.rent_id, self.reservation_id,
+        )
 
     def serialize(self):
-        return {"id": self.id, "name": self.name}
+        return {
+            "id": self.id,
+            "name": self.name,
+            "item_type_id": self.item_type_id,
+            "rent_id": self.rent_id,
+            "reservation_id": self.reservation_id,
+        }
 
 
 class Client(db.Model):
     __tablename__ = "client"
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String())
-    rent_id = db.relationship("Rent", backref="client", lazy=True)
-    reservation_id = db.relationship("Reservation", backref="client", lazy=True)
+    name = db.Column(db.String(100), nullable=False)
+    rents = db.relationship("Rent", backref="rents", cascade="all")
+    reservations = db.relationship("Reservation", backref="reservations", cascade="all")
 
     def __init__(self, name):
         self.name = name
@@ -66,14 +75,42 @@ class Rent(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     client_id = db.Column(db.Integer, db.ForeignKey("client.id"), nullable=False)
-    item_id = db.Column(db.Integer, db.ForeignKey("item.id"), nullable=False)
+    client = db.relationship(Client, primaryjoin=client_id == Client.id, cascade="all")
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    rent_item = db.relationship("Item", backref="rent", cascade="all")
+
+    def __init__(self, client):
+        self.client = client
+
+    def __repr__(self):
+        return "id {} client_id {}".format(self.id, self.client_id)
+
+    def serialize(self):
+        return {"id": self.id, "client": self.client_id, "created_at": self.created_at}
 
 
 class Reservation(db.Model):
     __tablename__ = "reservation"
 
     id = db.Column(db.Integer, primary_key=True)
-    client_id = db.Column(db.Integer, db.ForeignKey("client.id"), nullable=False)
-    item_id = db.Column(db.Integer, db.ForeignKey("item.id"), nullable=False)
+    client_id = db.Column(db.Integer, db.ForeignKey("client.id"))
+    client = db.relationship(Client, primaryjoin=client_id == Client.id)
     reservation_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    rent_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    item = db.relationship("Item", backref="reservation", cascade="all")
+
+    def __init__(self, client):
+        self.client = client
+
+    def __repr__(self):
+        return "id {} client_id {} reservation_date {} rent_date {}".format(
+            self.id, self.client_id, self.reservation_date, self.rent_date
+        )
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "client": self.client_id,
+            "reservation_date": self.reservation_date,
+            "rent_date": self.rent_date,
+        }

@@ -10,11 +10,9 @@ def delete_item_type(item_type_id):
         item_type = ItemType.query.get_or_404(item_type_id)
         db.session.delete(item_type)
         db.session.commit()
-        return "ItemType deleted. item_type id={}, name={}".format(
-            item_type.id, item_type.name
-        )
+        return jsonify(item_type.serialize())
     except Exception as e:
-        return str(e)
+        return abort(400, e)
 
 
 @app.route("/item_type/<item_type_id>", methods=["PUT"])
@@ -31,11 +29,9 @@ def update_item_type(item_type_id):
                 item_type.name = data["name"]
                 db.session.add(item_type)
                 db.session.commit()
-                return "ItemType updated. item_type id={}, name={}".format(
-                    item_type.id, item_type.name
-                )
+                return jsonify(item_type.serialize())
         except Exception as e:
-            return str(e)
+            return abort(400, e)
 
 
 @app.route("/item_type", methods=["GET"])
@@ -44,7 +40,7 @@ def get_item_type():
         items = ItemType.query.all()
         return jsonify([e.serialize() for e in items])
     except Exception as e:
-        return str(e)
+        return abort(400, e)
 
 
 @app.route("/item_type", methods=["POST"])
@@ -60,8 +56,6 @@ def post_item_type():
                 item_type = ItemType(name=data["name"])
                 db.session.add(item_type)
                 db.session.commit()
-                return "ItemType added. item_type id={}, name={}".format(
-                    item_type.id, item_type.name
-                )
+                return jsonify(item_type.serialize())
         except Exception as e:
-            return str(e)
+            return abort(400, e)

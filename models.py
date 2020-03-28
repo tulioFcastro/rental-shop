@@ -58,7 +58,7 @@ class Client(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     rents = db.relationship("Rent", backref="rents", cascade="all")
-    reservations = db.relationship("Reservation", backref="reservations", cascade="all")
+    reservations = db.relationship("Reservation", backref="client", cascade="all")
 
     def __init__(self, name):
         self.name = name
@@ -74,8 +74,9 @@ class Rent(db.Model):
     __tablename__ = "rent"
 
     id = db.Column(db.Integer, primary_key=True)
-    client_id = db.Column(db.Integer, db.ForeignKey("client.id"), nullable=False)
-    client = db.relationship(Client, primaryjoin=client_id == Client.id, cascade="all")
+    client_id = db.Column(
+        db.Integer, db.ForeignKey("client.id"), nullable=True, index=True
+    )
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     rent_item = db.relationship("Item", backref="rent", cascade="all")
 
@@ -93,8 +94,9 @@ class Reservation(db.Model):
     __tablename__ = "reservation"
 
     id = db.Column(db.Integer, primary_key=True)
-    client_id = db.Column(db.Integer, db.ForeignKey("client.id"))
-    client = db.relationship(Client, primaryjoin=client_id == Client.id)
+    client_id = db.Column(
+        db.Integer, db.ForeignKey("client.id"), nullable=True, index=True
+    )
     reservation_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
     rent_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
     item = db.relationship("Item", backref="reservation", cascade="all")

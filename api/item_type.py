@@ -12,7 +12,7 @@ def delete_item_type(item_type_id):
         db.session.commit()
         return jsonify(item_type.serialize())
     except Exception as e:
-        return abort(400, e)
+        return abort(e.code, e)
 
 
 @app.route("/item_type/<item_type_id>", methods=["PUT"])
@@ -31,7 +31,7 @@ def update_item_type(item_type_id):
                 db.session.commit()
                 return jsonify(item_type.serialize())
         except Exception as e:
-            return abort(400, e)
+            return abort(e.code, e)
 
 
 @app.route("/item_type", methods=["GET"])
@@ -40,7 +40,7 @@ def get_item_type():
         items = ItemType.query.all()
         return jsonify([e.serialize() for e in items])
     except Exception as e:
-        return abort(400, e)
+        return abort(e.code, e)
 
 
 @app.route("/item_type", methods=["POST"])
@@ -58,4 +58,4 @@ def post_item_type():
                 db.session.commit()
                 return jsonify(item_type.serialize())
         except Exception as e:
-            return abort(400, e)
+            return abort(e.code, e)

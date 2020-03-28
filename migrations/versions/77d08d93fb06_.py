@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 24c1a2389e71
+Revision ID: 77d08d93fb06
 Revises: 
-Create Date: 2020-03-28 20:16:24.350622
+Create Date: 2020-03-28 20:43:56.902237
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '24c1a2389e71'
+revision = '77d08d93fb06'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -30,18 +30,21 @@ def upgrade():
     )
     op.create_table('rent',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('client_id', sa.Integer(), nullable=False),
+    sa.Column('client_id', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.ForeignKeyConstraint(['client_id'], ['client.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_index(op.f('ix_rent_client_id'), 'rent', ['client_id'], unique=False)
     op.create_table('reservation',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('client_id', sa.Integer(), nullable=True),
     sa.Column('reservation_date', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('rent_date', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.ForeignKeyConstraint(['client_id'], ['client.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_index(op.f('ix_reservation_client_id'), 'reservation', ['client_id'], unique=False)
     op.create_table('item',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=100), nullable=True),
@@ -65,7 +68,9 @@ def downgrade():
     op.drop_index(op.f('ix_item_rent_id'), table_name='item')
     op.drop_index(op.f('ix_item_item_type_id'), table_name='item')
     op.drop_table('item')
+    op.drop_index(op.f('ix_reservation_client_id'), table_name='reservation')
     op.drop_table('reservation')
+    op.drop_index(op.f('ix_rent_client_id'), table_name='rent')
     op.drop_table('rent')
     op.drop_table('item_type')
     op.drop_table('client')

@@ -1,34 +1,21 @@
 import os
-from flask import Flask, request, jsonify, render_template
-from flask_sqlalchemy import SQLAlchemy
+
+from flask import Flask
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-app.config.from_object(os.environ['APP_SETTINGS'])
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config.from_object(os.environ["APP_SETTINGS"])
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 # enable CORS
-CORS(app, resources={r'/*': {'origins': '*'}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 
-from models import Item, ItemType
+# import API
+from api import item, item_type
 
-@app.route("/items")
-def get_all_items():
-    try:
-        items=Item.query.all()
-        return jsonify([e.serialize() for e in items])
-    except Exception as e:
-	    return(str(e))
 
-@app.route("/item_types")
-def get_all_item_types():
-    try:
-        items=ItemType.query.all()
-        return jsonify([e.serialize() for e in items])
-    except Exception as e:
-	    return(str(e))
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run()

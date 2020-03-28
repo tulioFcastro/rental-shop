@@ -1,24 +1,30 @@
 from app import db
 from sqlalchemy.sql import func
 
+
 class Item(db.Model):
     __tablename__ = "item"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
-    item_type_id = db.Column(db.Integer, db.ForeignKey("item_type.id"), nullable=False)
+
+    item_type_id = db.Column(db.Integer, db.ForeignKey("item_type.id"), nullable=False, index=True)
+    type = db.relationship("ItemType", backref="type_of_item", foreign_keys=[item_type_id])
+
     rent_id = db.relationship("Rent", backref="item", lazy=True)
     reservation_id = db.relationship("Reservation", backref="item", lazy=True)
 
-    def __init__(self, name, item_type_id):
+    def __init__(self, name, type):
         self.name = name
-        self.item_type_id = item_type_id
+        self.type = type
 
     def __repr__(self):
-        return "<id {}>".format(self.id)
+        return "<id {}, name {}, item_type_id {}>".format(
+            self.id, self.name, self.item_type_id
+        )
 
     def serialize(self):
-        return {"id": self.id, "name": self.name}
+        return {"id": self.id, "name": self.name, "item_type_id": self.item_type_id}
 
 
 class ItemType(db.Model):
@@ -26,7 +32,6 @@ class ItemType(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(), nullable=False)
-    item_id = db.relationship("Item", backref="item_type", lazy=True)
 
     def __init__(self, name):
         self.name = name
@@ -63,6 +68,7 @@ class Rent(db.Model):
     client_id = db.Column(db.Integer, db.ForeignKey("client.id"), nullable=False)
     item_id = db.Column(db.Integer, db.ForeignKey("item.id"), nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+
 
 class Reservation(db.Model):
     __tablename__ = "reservation"

@@ -1,3 +1,8 @@
+# Python
+
+- sudo apt-get update
+- sudo apt-get install python3.6
+
 # Database - PostgreSQL
 
 ## Install
@@ -12,6 +17,7 @@ sudo apt-get install postgresql postgresql-contrib
 - grant all privileges on database rental_shop to rental_shop;
 
 # Run Application
+- virtualenv --python=python3 env --no-site-packages
 - source env/bin/activate
 
 The first time you will need export environments to run locally:

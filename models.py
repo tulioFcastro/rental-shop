@@ -100,7 +100,6 @@ class Reservation(db.Model):
     )
     reservation_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
     rent_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
-    # item = db.relationship("Item", backref="reservation", cascade="all")
     reserved_item = db.relationship(
         "Item", primaryjoin=Item.reservation_id == id
     )

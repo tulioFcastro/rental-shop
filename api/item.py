@@ -2,7 +2,6 @@ from flask import jsonify, abort, request
 
 from app import app, db
 
-# import models
 from models import Item, ItemType
 
 
@@ -49,9 +48,7 @@ def delete_item(item_id):
         item = Item.query.get_or_404(item_id)
         db.session.delete(item)
         db.session.commit()
-        return "Item deleted. item id={}, name={}, item_type_id={}".format(
-            item.id, item.name, item.item_type_id
-        )
+        return jsonify(item.serialize())
     except Exception as e:
         return abort(e.code, e)
 
@@ -73,8 +70,6 @@ def update_item(item_id):
                 item.name = data["name"]
                 db.session.add(item)
                 db.session.commit()
-                return "Item updated. item id={}, name={}, item_type_id={}".format(
-                    item.id, item.name, item.item_type_id
-                )
+                return jsonify(item.serialize())
         except Exception as e:
             return abort(e.code, e)

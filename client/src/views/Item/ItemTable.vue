@@ -1,13 +1,19 @@
 <template>
   <b-table :items="items" :fields="fields" striped hover responsive>
+    <template v-slot:cell(reservation_id)="row">
+      {{ rentedOrReserved(row.item) }}
+    </template>
+    <template v-slot:cell(rent_id)="row">
+      {{ rentedOrReserved(row.item) }}
+    </template>
     <template v-slot:cell(actions)="row">
       <b-dropdown size="lg" variant="link" toggle-class="text-decoration-none" no-caret>
         <template v-slot:button-content>
           <b-icon-three-dots-vertical></b-icon-three-dots-vertical>
           <span class="sr-only"></span>
         </template>
-        <b-dropdown-item @click="info(row.item, row.index, $event.target)">Rent</b-dropdown-item>
-        <b-dropdown-item @click="info(row.item, row.index, $event.target)">Reserve</b-dropdown-item>
+        <b-dropdown-item @click="rentItem(row.item)">Rent</b-dropdown-item>
+        <b-dropdown-item @click="reserveItem(row.item)">Reserve</b-dropdown-item>
       </b-dropdown>
     </template>
   </b-table>
@@ -30,16 +36,25 @@ export default {
           sortable: true,
           sortDirection: 'desc',
         },
+        { key: 'reservation_id', label: 'Reserved' },
+        { key: 'rent_id', label: 'Rented' },
         { key: 'actions', label: 'Actions' },
       ];
     },
   },
   methods: {
-    info(item, index, button) {
-      console.log(item, index, button);
+    rentItem(item) {
+      console.log(item);
+    },
+    reserveItem(item) {
+      console.log(item);
+    },
+    rentedOrReserved(item) {
+      if (item.rent_id !== null) return 'Rented';
+      if (item.reservation_id !== null) return 'Reserved';
+
+      return 'Free';
     },
   },
 };
 </script>
-
-<style></style>

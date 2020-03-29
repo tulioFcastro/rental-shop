@@ -8,6 +8,9 @@
     <div class="d-flex flex-column justify-content-center w-100">
       <Form />
     </div>
+    <router-link class="font-weight-bold" :to="{ name: 'SignUp' }">
+      Go to Sign-up
+    </router-link>
   </div>
 </template>
 

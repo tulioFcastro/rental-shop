@@ -60,7 +60,7 @@ def update_item(item_id):
     else:
         try:
             data = request.get_json()
-            if data["name"] == None:
+            if data["name"] is None:
                 abort(422)
             else:
                 item = Item.query.get_or_404(item_id)

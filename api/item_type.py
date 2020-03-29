@@ -22,7 +22,7 @@ def update_item_type(item_type_id):
     else:
         try:
             data = request.get_json()
-            if data["name"] == None:
+            if data["name"] is None:
                 abort(422)
             else:
                 item_type = ItemType.query.get_or_404(item_type_id)
@@ -50,7 +50,7 @@ def post_item_type():
     else:
         try:
             data = request.get_json()
-            if data["name"] == None:
+            if data["name"] is None:
                 abort(422)
             else:
                 item_type = ItemType(name=data["name"])

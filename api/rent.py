@@ -1,7 +1,7 @@
 from flask import abort, jsonify, request
 
 from app import app, db
-from models import Client, Rent
+from models import User, Rent
 
 
 @app.route("/rent", methods=["GET"])
@@ -20,10 +20,10 @@ def post_rent():
     else:
         try:
             data = request.get_json()
-            if "client_id" in data.keys():
-                client = Client.query.get_or_404(data["client_id"])
+            if "user_id" in data.keys():
+                user = User.query.get_or_404(data["user_id"])
                 rent = Rent()
-                rent.client_id = client.id
+                rent.user_id = user.id
                 db.session.add(rent)
                 db.session.commit()
                 return jsonify(rent.serialize())
@@ -60,12 +60,12 @@ def update_rent(rent_id):
     else:
         try:
             data = request.get_json()
-            if "client_id" in data.keys():
+            if "user_id" in data.keys():
                 rent = Rent.query.get_or_404(rent_id)
                 print(rent)
-                client = Client.query.get_or_404(data["client_id"])
-                print(client)
-                rent.client_id = client.id
+                user = user.query.get_or_404(data["user_id"])
+                print(user)
+                rent.user_id = user.id
                 db.session.add(rent)
                 db.session.commit()
                 return jsonify(rent.serialize())

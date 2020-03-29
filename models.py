@@ -80,14 +80,11 @@ class Rent(db.Model):
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     rent_item = db.relationship("Item", backref="rent", cascade="all")
 
-    def __init__(self, client):
-        self.client = client
-
     def __repr__(self):
         return "id {} client_id {}".format(self.id, self.client_id)
 
     def serialize(self):
-        return {"id": self.id, "client": self.client_id, "created_at": self.created_at}
+        return {"id": self.id, "client_id": self.client_id, "created_at": self.created_at}
 
 
 class Reservation(db.Model):

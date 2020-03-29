@@ -14,7 +14,7 @@ db = SQLAlchemy(app)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # import API
-from api import client, item, item_type
+from api import client, item, item_type, rent
 
 
 if __name__ == "__main__":

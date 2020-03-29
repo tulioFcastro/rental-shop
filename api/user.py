@@ -20,10 +20,13 @@ def post_user():
     else:
         try:
             data = request.get_json()
-            user = User(data["name"])
-            db.session.add(user)
-            db.session.commit()
-            return jsonify(user.serialize())
+            if "email" in data.keys() and "name" in data.keys():
+                user = User(data["name"], data["email"])
+                db.session.add(user)
+                db.session.commit()
+                return jsonify(user.serialize())
+            else:
+                abort(422)
         except Exception as e:
             return abort(e.code, e)
 

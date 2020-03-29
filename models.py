@@ -57,17 +57,19 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False, unique=True)
     rents = db.relationship("Rent", backref="rents", cascade="all")
     reservations = db.relationship("Reservation", backref="user", cascade="all")
 
-    def __init__(self, name):
+    def __init__(self, name, email):
         self.name = name
+        self.email = email
 
     def __repr__(self):
         return "<id {}>".format(self.id)
 
     def serialize(self):
-        return {"id": self.id, "name": self.name}
+        return {"id": self.id, "name": self.name, "email": self.email}
 
 
 class Rent(db.Model):

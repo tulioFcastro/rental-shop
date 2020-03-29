@@ -74,11 +74,9 @@ class Rent(db.Model):
     __tablename__ = "rent"
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(
-        db.Integer, db.ForeignKey("user.id"), nullable=True, index=True
-    )
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True, index=True)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
-    rent_item = db.relationship("Item", backref="rent", cascade="all")
+    rent_item = db.relationship("Item", primaryjoin=Item.rent_id == id)
 
     def __repr__(self):
         return "id {} user_id {}".format(self.id, self.user_id)
@@ -95,14 +93,10 @@ class Reservation(db.Model):
     __tablename__ = "reservation"
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(
-        db.Integer, db.ForeignKey("user.id"), nullable=True, index=True
-    )
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True, index=True)
     reservation_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
     rent_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
-    reserved_item = db.relationship(
-        "Item", primaryjoin=Item.reservation_id == id
-    )
+    reserved_item = db.relationship("Item", primaryjoin=Item.reservation_id == id)
 
     def __repr__(self):
         return "id {} user_id {} reservation_date {} rent_date {}".format(

@@ -21,14 +21,11 @@ sudo apt-get install postgresql postgresql-contrib
 - source env/bin/activate
 
 The first time you will need export environments to run locally:
-- export APP_SETTINGS="config.DevelopmentConfig"
-- export DATABASE_URL="postgresql://postgres:postgres@localhost:5432/rental_shop"
+- source script.sh
 
 After that, execute:
 - pip install -r requirements.txt
-- python manage.py db init
-- python manage.py db migrate
-- python manage.py db upgrade
+- python manage.py db init && python manage.py db migrate && python manage.py db upgrade
 
 Finally, execute application:
 - flask run

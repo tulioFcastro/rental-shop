@@ -1,7 +1,7 @@
 # Database - PostgreSQL
 
 ## Install
-sudo apt-get install postgresql postgresql-contrib
+- sudo apt-get install postgresql postgresql-contrib
 
 ## PostgreSQL cli
 - sudo -i -u postgres
@@ -28,7 +28,7 @@ Finally, execute application:
 
 The front-end was developed with the VueJS Framework and is inserted in the ```client``` folder.
 
-## Project setup
+### Project setup
 - cd client
 - npm install
 

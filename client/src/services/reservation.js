@@ -1,7 +1,14 @@
 import axiosLocal from './axios';
 
 export default {
-  reserve({ user_id, item_id, rent_date }) {
-    return axiosLocal.post('reservation', { user_id, item_id, rent_date });
+  cancelReservation(id) {
+    return axiosLocal.delete(`reservation/${id}`);
+  },
+  reserve({ userId, itemId, rentDate }) {
+    return axiosLocal.post('reservation', {
+      user_id: userId,
+      item_id: itemId,
+      rent_date: rentDate,
+    });
   },
 };

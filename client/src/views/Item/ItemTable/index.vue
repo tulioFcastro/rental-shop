@@ -14,15 +14,26 @@
             <span class="sr-only"></span>
           </template>
           <b-dropdown-item @click="rentItem(row.item)">Rent</b-dropdown-item>
+          <b-dropdown-item v-if="row.item.rent_id !== null" @click="returnItem(row.item)">
+            Return Item
+          </b-dropdown-item>
           <b-dropdown-item @click="reserveItem(row.item)">Reserve</b-dropdown-item>
+          <b-dropdown-item
+            v-if="row.item.reservation_id !== null"
+            @click="cancelReservation(row.item)">
+            Cancel Reservation
+          </b-dropdown-item>
         </b-dropdown>
       </template>
     </b-table>
-    <ReserveItemModal :item="selectedItem" @reservedItem="$emit('reservedItem')" />
+    <ReserveItemModal :item="selectedItem" @reservedItem="$emit('updateItem')" />
   </div>
 </template>
 
 <script>
+import { rentService, reservationService } from '@/services';
+import { mapState } from 'vuex';
+import ToastHelper from '@/helpers/toastHelper';
 import ReserveItemModal from './ReserveItemModal.vue';
 
 export default {
@@ -36,6 +47,9 @@ export default {
     },
   },
   computed: {
+    ...mapState('user', {
+      loggedUser: (state) => state.loggedUser,
+    }),
     fields() {
       return [
         {
@@ -56,8 +70,30 @@ export default {
     };
   },
   methods: {
+    cancelReservation(item) {
+      reservationService
+        .cancelReservation(item.reservation_id)
+        .then(() => {
+          ToastHelper.successMessage('Reservation canceled');
+          this.$emit('updateItem');
+        })
+        .catch(() => {
+          ToastHelper.dangerMessage('Some error while canceling reservation');
+        });
+    },
     rentItem(item) {
-      console.log(item);
+      rentService
+        .rentItem({
+          userId: this.loggedUser.id,
+          itemId: item.id,
+        })
+        .then(() => {
+          ToastHelper.successMessage('Item rented');
+          this.$emit('updateItem');
+        })
+        .catch(() => {
+          ToastHelper.dangerMessage('Some error while renting item');
+        });
     },
     reserveItem(item) {
       this.selectedItem = item;
@@ -68,6 +104,17 @@ export default {
       if (item.reservation_id !== null) return 'Reserved';
 
       return 'Free';
+    },
+    returnItem(item) {
+      rentService
+        .returnItem(item.rent_id)
+        .then(() => {
+          ToastHelper.successMessage('Returned Item');
+          this.$emit('updateItem');
+        })
+        .catch(() => {
+          ToastHelper.dangerMessage('Some error while returning item');
+        });
     },
   },
 };

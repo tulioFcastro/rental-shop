@@ -4,7 +4,7 @@
       <b-button variant="primary" v-b-modal.create-item-type-modal>Add Item Type</b-button>
       <b-button variant="primary" v-b-modal.create-item-modal>Add Item</b-button>
     </div>
-    <ItemTable :items="items" @reservedItem="loadItems" />
+    <ItemTable :items="items" @updateItem="loadItems" />
     <CreateItemTypeModal />
     <CreateItemModal @createdItem="loadItems" />
   </div>

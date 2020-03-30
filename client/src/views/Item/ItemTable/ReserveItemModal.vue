@@ -1,5 +1,5 @@
 <template>
-  <b-modal id="reserve-item-modal" title="Create Item" size="md" centered hide-footer>
+  <b-modal id="reserve-item-modal" title="Reserve Item" size="md" centered hide-footer>
     <b-form @submit="onSubmit" class="d-flex flex-column w-100 h-auto">
       <h5 class="mb-2">Select datetime to reserve item</h5>
       <b-form-timepicker v-model="form.time" />
@@ -53,9 +53,9 @@ export default {
       evt.preventDefault();
       reservationService
         .reserve({
-          user_id: this.loggedUser.id,
-          item_id: this.item.id,
-          rent_date: moment(`${this.form.date} ${this.form.time}`).format(),
+          userId: this.loggedUser.id,
+          itemId: this.item.id,
+          rentDate: moment(`${this.form.date} ${this.form.time}`).format(),
         })
         .then(() => {
           ToastHelper.successMessage('Item reserved');

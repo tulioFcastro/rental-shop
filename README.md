@@ -1,8 +1,3 @@
-# Python
-
-- sudo apt-get update
-- sudo apt-get install python3.6
-
 # Database - PostgreSQL
 
 ## Install
@@ -12,12 +7,11 @@ sudo apt-get install postgresql postgresql-contrib
 - sudo -i -u postgres
 - psql
 - create role rental_shop;
-- drop database rental_shop;
 - create database rental_shop;
 - grant all privileges on database rental_shop to rental_shop;
 
 # Run Application
-- virtualenv --python=python3 env --no-site-packages
+- virtualenv --python=python3.7 env --no-site-packages
 - source env/bin/activate
 
 The first time you will need export environments to run locally:
@@ -25,7 +19,17 @@ The first time you will need export environments to run locally:
 
 After that, execute:
 - pip install -r requirements.txt
-- python manage.py db init && python manage.py db migrate && python manage.py db upgrade
 
 Finally, execute application:
 - flask run
+
+
+# Client side
+
+Was developed frontend side with VusJS Framework.
+
+## Project setup
+- npm install
+
+### Compiles and hot-reloads for development
+- npm run serve:development

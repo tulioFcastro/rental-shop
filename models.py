@@ -23,6 +23,7 @@ class Item(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
+    value = db.Column(db.Float(), nullable=True, default=0)
 
     item_type_id = db.Column(
         db.Integer, db.ForeignKey("item_type.id"), nullable=True, index=True
@@ -49,6 +50,7 @@ class Item(db.Model):
             "item_type_id": self.item_type_id,
             "rent_id": self.rent_id,
             "reservation_id": self.reservation_id,
+            "value": self.value
         }
 
 

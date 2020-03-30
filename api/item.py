@@ -26,6 +26,8 @@ def post_item():
                 item_type = ItemType.query.get_or_404(data["item_type_id"])
                 item.item_type_id = item_type.id
                 item.type = item_type
+            if "value" in data.keys():
+                item.value = data["value"]
             db.session.add(item)
             db.session.commit()
             return jsonify(item.serialize())

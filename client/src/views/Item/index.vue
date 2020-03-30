@@ -4,7 +4,7 @@
       <b-button variant="primary" v-b-modal.create-item-type-modal>Add Item Type</b-button>
       <b-button variant="primary" v-b-modal.create-item-modal>Add Item</b-button>
     </div>
-    <ItemTable :items="items" />
+    <ItemTable :items="items" @reservedItem="loadItems" />
     <CreateItemTypeModal />
     <CreateItemModal @createdItem="loadItems" />
   </div>
@@ -15,7 +15,7 @@ import { itemService } from '@/services';
 import { mapActions } from 'vuex';
 import CreateItemTypeModal from './CreateItemTypeModal.vue';
 import CreateItemModal from './CreateItemModal.vue';
-import ItemTable from './ItemTable.vue';
+import ItemTable from './ItemTable/index.vue';
 
 export default {
   components: {

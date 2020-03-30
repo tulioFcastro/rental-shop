@@ -9,10 +9,16 @@ import App from './App.vue';
 import './assets/global.scss';
 import router from './router';
 import store from './store';
+import moment from 'moment-timezone';
+import VueMoment from 'vue-moment';
 
 Vue.use(BootstrapVueIcons);
 Vue.use(BootstrapVue);
 Vue.use(Vuelidate);
+moment.locale('pt-BR');
+Vue.use(VueMoment, {
+  moment,
+});
 Vue.config.productionTip = false;
 
 const comp = new Vue({

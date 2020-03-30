@@ -26,9 +26,10 @@ Finally, execute application:
 
 # Client side
 
-Was developed frontend side with VusJS Framework.
+The front-end was developed with the VueJS Framework and is inserted in the ```client``` folder.
 
 ## Project setup
+- cd client
 - npm install
 
 ### Compiles and hot-reloads for development

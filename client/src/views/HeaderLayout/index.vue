@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="dark" variant="info">
-      <b-navbar-brand>Rental Shop</b-navbar-brand>
+      <b-navbar-brand>Rental Shop - You're welcome {{ name }}</b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -24,11 +24,15 @@
   </div>
 </template>
 <script>
-import ProfileModal from './ProfileModal.vue';
+import { mapGetters } from 'vuex';
+import ProfileModal from './ProfileModal/index.vue';
 
 export default {
   components: {
     ProfileModal,
+  },
+  computed: {
+    ...mapGetters('user', ['name']),
   },
 };
 </script>

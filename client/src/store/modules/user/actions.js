@@ -19,4 +19,11 @@ export default {
       return data;
     });
   },
+  updateUser({ commit }, { name, email, userId }) {
+    return userService.update({ name, email, userId }).then(({ data }) => {
+      commit('setLoggedUser', data);
+
+      return data;
+    });
+  },
 };

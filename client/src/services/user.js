@@ -7,4 +7,9 @@ export default {
       name,
     });
   },
+  update({ userId, name }) {
+    return axiosLocal.put(`user/${userId}`, {
+      name,
+    });
+  },
 };

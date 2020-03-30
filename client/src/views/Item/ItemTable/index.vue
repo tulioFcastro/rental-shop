@@ -13,11 +13,17 @@
             <b-icon-three-dots-vertical></b-icon-three-dots-vertical>
             <span class="sr-only"></span>
           </template>
-          <b-dropdown-item @click="rentItem(row.item)">Rent</b-dropdown-item>
+          <b-dropdown-item v-if="row.item.rent_id === null" @click="rentItem(row.item)">
+            Rent
+          </b-dropdown-item>
           <b-dropdown-item v-if="row.item.rent_id !== null" @click="returnItem(row.item)">
             Return Item
           </b-dropdown-item>
-          <b-dropdown-item @click="reserveItem(row.item)">Reserve</b-dropdown-item>
+          <b-dropdown-item
+            v-if="row.item.reservation_id === null"
+            @click="reserveItem(row.item)">
+            Reserve
+          </b-dropdown-item>
           <b-dropdown-item
             v-if="row.item.reservation_id !== null"
             @click="cancelReservation(row.item)">

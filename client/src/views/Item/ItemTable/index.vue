@@ -7,6 +7,9 @@
       <template v-slot:cell(rent_id)="row">
         {{ rentedOrReserved(row.item) }}
       </template>
+      <template v-slot:cell(value)="row">
+        {{ row.item.value | currency }}
+      </template>
       <template v-slot:cell(actions)="row">
         <b-dropdown size="lg" variant="link" toggle-class="text-decoration-none" no-caret>
           <template v-slot:button-content>
@@ -64,6 +67,7 @@ export default {
           sortable: true,
           sortDirection: 'desc',
         },
+        { key: 'value', label: 'Value' },
         { key: 'reservation_id', label: 'Reserved' },
         { key: 'rent_id', label: 'Rented' },
         { key: 'actions', label: 'Actions' },

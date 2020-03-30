@@ -6,6 +6,7 @@ const axiosLocal = axios.create({
 
 axiosLocal.interceptors.request.use(
   (config) => {
+    /* eslint no-param-reassign: "error" */
     config.headers['Content-Type'] = 'application/json';
 
     return config;

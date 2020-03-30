@@ -8,7 +8,7 @@
     <div class="d-flex flex-column justify-content-center w-100">
       <Form />
     </div>
-    <router-link class="font-weight-bold" :to="{ name: 'Login' }">
+    <router-link class="mt-3 font-weight-bold" :to="{ name: 'Login' }">
       Go to Login
     </router-link>
   </div>

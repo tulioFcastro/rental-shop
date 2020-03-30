@@ -1,7 +1,5 @@
-/* eslint no-underscore-dangle: "error" */
+/* eslint-disable no-underscore-dangle */
 class ToastManager {
-  constructor() {}
-
   get componentVue() {
     return this._componentVue;
   }
